@@ -1,0 +1,16 @@
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(11,GPIO.OUT) #STBY
+GPIO.setup(7,GPIO.OUT) #AIN1
+GPIO.setup(5,GPIO.OUT) #AIN2
+GPIO.setup(3,GPIO.OUT) #PWMA
+
+GPIO.output(11,True)
+GPIO.output(7,True)
+GPIO.output(5,False)
+
+pwm=GPIO.PWM(3,350)
+
+pwm.start(50)
+
