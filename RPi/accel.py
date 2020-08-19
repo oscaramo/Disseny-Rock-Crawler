@@ -36,6 +36,6 @@ with open('acc_data.csv','w',newline='') as f:
             print(lx)
             lx,ly,lz=l,l,l
             t=datetime.now()
-        elif fin.seconds>60*3:
+        elif fin.seconds>60*2:
             break
     

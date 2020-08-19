@@ -1,0 +1,44 @@
+import time
+import pipan
+import pygame
+from pygame.locals import *
+import os, sys
+
+pygame.init() #Iniciar Pygame
+
+screen=pygame.display.set_mode((240,240))
+pygame.display.set_caption('Pi Crawler')
+
+stop=False 
+
+[x,y]=[150,150] #Posicions inicials PiPan
+
+p=pipan.PiPan()
+
+p.do_tilt(x)
+p.do_pan(y)
+
+while True:
+    keys=pygame.key.get_pressed()
+    if stop:
+        break
+    for event in pygame.event.get():
+        if event.type==QUIT:
+            pygame.quit()
+            sys.exit()
+            
+
+    if keys[K_d] and x<250:
+        x=x+2
+    elif keys[K_a] and x>50:
+        x=x-2
+    elif keys[K_w] and y<250:
+        y=y+2
+    elif keys[K_s] and y>50:
+        y=y-2
+    elif keys[K_ESCAPE]:
+        p.do_pan(150)
+        p.do_tilt(150)
+        stop=True
+    p.do_pan(y)
+    p.do_tilt(x)
