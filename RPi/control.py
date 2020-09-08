@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BOARD)
 
-#Càmera
+#Camera
 GPIO.setup(3,GPIO.OUT)
 GPIO.setup(5,GPIO.OUT)
 
@@ -56,17 +56,23 @@ while True:
             sys.exit()
     key=pygame.key.get_pressed()
     
-    #Control servos càmera
+    #Control servos camera
     if key[K_a] and h<8:#11
         h=h+0.56875
-    elif key[K_d] and h>4:#1
+    if key[K_d] and h>4:#1
         h=h-0.56875
-    elif key[K_s] and v<8:
+    if not key[K_a] and not key[K_d]:
+        if h<6:
+            h=h+0.56875
+        if h>6:
+            h=h-0.56875
+            
+    if key[K_s] and v<8:
         v=v+0.56875
-    elif key[K_w] and v>4:
+    if key[K_w] and v>4:
         v=v-0.56875
     
-    #Control servo de direcció
+    #Control servo de direccio
     if key[K_LEFT] and direc<21:#Canviar numero
         direc=direc+2
     if key[K_RIGHT] and direc>1:#canviar numero
@@ -74,18 +80,18 @@ while True:
     if not key[K_LEFT] and not key[K_RIGHT]:
         if direc>13:
             direc=direc-2
-        elif direc<13:
+        if direc<13:
             direc=direc+2
         if direc==14 or direc==12:
             direc=13
     
     #Control motor escombretes
-    if key[K_UP] and up<100:
+    if key[K_DOWN] and up<100:
         down=0
         if up==0:#si venim de estar en down
             GPIO.output(22,0)#Activem STBY
             time.sleep(0.1)#esperem
-            pwm_M.ChangeDutyCycle(0)#Canviem de sentit de rotació a UP
+            pwm_M.ChangeDutyCycle(0)#Canviem de sentit de rotacio a UP
             GPIO.output(13,0)#AIN2
             time.sleep(0.1)
             GPIO.output(12,1)#AIN1
@@ -93,7 +99,7 @@ while True:
         up=up+5
         pwm_M.ChangeDutyCycle(up)
         
-    if key[K_DOWN] and down<100:
+    if key[K_UP] and down<100:
         up=0
         if down==0: #Venim de sentit UP
             GPIO.output(22,0) #Activem STBY
@@ -115,7 +121,7 @@ while True:
             pwm_M.ChangeDutyCycle(down)
     
     #Sortir del programa
-    elif key[K_ESCAPE]:
+    if key[K_ESCAPE]:
         
         pwm_h.ChangeDutyCycle(5.5)
         pwm_v.ChangeDutyCycle(5.5)
@@ -124,7 +130,7 @@ while True:
     pwm_h.ChangeDutyCycle(h)
     pwm_v.ChangeDutyCycle(v)
     pwm_S.ChangeDutyCycle(direc)
-    print(up,down)
+    
     
 GPIO.output(22,0)
 GPIO.output(12,0)
